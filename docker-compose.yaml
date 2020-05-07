@@ -1,0 +1,30 @@
+version: '2.0'
+services:
+  frontend:
+    build: frontend/.
+    environment:
+            - BACKEND_SERVER=http://backend/api/process
+    ports:
+    - "80:80"
+    networks:
+    - backend
+  backend:
+    build: backend/.
+    environment:
+    - STORE=true
+    - STORAGE_SERVER=http://storage/api/store
+    networks:
+    - backend
+    - storage
+  storage:
+    build: storage/.
+    volumes:
+      - ./test_storage/:/var/images
+    ports:
+    - 80
+    networks:
+    - storage
+
+networks:
+  backend:
+  storage:
